@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 import librosa
 import librosa.display
 
+# Task 1 (Assignment 1)
+
 y, sr = librosa.load('piano.wav')
 D = librosa.stft(y) # STFT of y
 S_db = librosa.amplitude_to_db(np.abs(D), ref=np.max)
@@ -12,6 +14,7 @@ plt.colorbar()
 plt.show()
 
 # y, sr = librosa.load('piano.wav', sr=16000)
+
 
 # Define parameters
 window_size = 512
