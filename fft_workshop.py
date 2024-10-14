@@ -57,45 +57,22 @@ with open('piano_energies.txt', 'w') as f:
         
 # Task 2 part 2:
 
-# Function to find max-energy band index
-def max_energy_band(energy_frame):
-    band_energies = []
-    for i in range(n_bands):
-        # Get indices for the current band
-        low_freq, high_freq = band_edges[i], band_edges[i + 1]
-        band_indices = np.where((freqs >= low_freq) & (freqs < high_freq))[0]
-        # Calculate energy in this band
-        band_energy = np.sum(energy_frame[band_indices])
-        band_energies.append(band_energy)
-    return np.argmax(band_energies), band_edges[np.argmax(band_energies)]  # Return max band index and avg freq
+band_limits = np.linspace(0, sr // 2, n_bands + 1)
 
-# Initialize the results list and repeat counter
-results = []
-repeat_count = 0
-prev_band_index = None
+# Initialize pitch tendency list
+pitch_tendencies = []
+last_max_band = np.argmax(energy_vectors[0])
 
-# Process each window
-for frame in range(D_mag.shape[1]):
-    # Calculate max-energy band for the current frame
-    band_index, band_avg_freq = max_energy_band(D_mag[:, frame])
-    
-    # Compare with the previous window's max-energy band
-    if prev_band_index is None:
-        # First window, no comparison
-        results.append('U')
-    elif band_index > prev_band_index:
-        results.append('U')
-        repeat_count = 0
-    elif band_index < prev_band_index:
-        results.append('D')
-        repeat_count = 0
+# Iterate over the windows and compute Ci values
+for i in range(1, len(energy_vectors)):
+    current_max_band = np.argmax(energy_vectors[i])
+    if current_max_band > last_max_band:
+        pitch_tendencies.append("U")
+    elif current_max_band < last_max_band:
+        pitch_tendencies.append("D")
     else:
-        # If the same band, increment repeat counter and note 'Rx'
-        repeat_count += 1
-        results[-1] = f'R{repeat_count}' if results and 'R' in results[-1] else f'R1'
-    
-    # Update previous band index
-    prev_band_index = band_index
-
-# Display the encoded pitch tendency sequence
-print(' '.join(results))
+        if pitch_tendencies and pitch_tendencies[-1].startswith("R"):
+            pitch_tendencies[-1] = f"R{int(pitch_tendencies[-1][1:]) + 1}"
+        else:
+            pitch_tendencies.append("R1")
+    last_max_band = current_max_band
