@@ -24,7 +24,7 @@ band_limits = [(i * 1000, (i + 1) * 1000) for i in range(n_bands)]  # frequency 
 # calculate the band energy for each window
 def calculate_band_energy(y, sr, band_limits):
     # short time fourier transdorm
-    stft = np.abs(librosa.stft(y, n_fft=window_size, hop_length=window_size//2))
+    stft = np.abs(librosa.stft(y, n_fft = window_size, hop_length = window_size//2))
     # frequencies corresponding to FFT bins
     freqs = librosa.fft_frequencies(sr=sr, n_fft=window_size)
     
@@ -49,7 +49,7 @@ def encode_pitch_tendencies(energies):
     last_max_band = None
     repeat_count = 0
     
-    for window_energy in energies:
+    for i, window_energy in enumerate(energies):
         max_band = np.argmax(window_energy)
         
         if last_max_band is None:
@@ -68,8 +68,9 @@ def encode_pitch_tendencies(energies):
     
     return tendencies
 
-# encode pitch tendencies and print them 
+energies = calculate_band_energy(y, sr, band_limits)
 tendencies = encode_pitch_tendencies(energies)
-print("Pitch Tendencies:")
-for tendency in tendencies:
-    print(tendency)
+
+# final pitch tendencies
+print("\nFinal Pitch Tendencies:")
+print("\n".join(tendencies))
