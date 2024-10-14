@@ -54,3 +54,48 @@ for frame in range(D_mag.shape[1]):
 with open('piano_energies.txt', 'w') as f:
     for vec in energy_vectors:
         f.write(' '.join(map(str, vec)) + '\n')
+        
+# Task 2 part 2:
+
+# Function to find max-energy band index
+def max_energy_band(energy_frame):
+    band_energies = []
+    for i in range(n_bands):
+        # Get indices for the current band
+        low_freq, high_freq = band_edges[i], band_edges[i + 1]
+        band_indices = np.where((freqs >= low_freq) & (freqs < high_freq))[0]
+        # Calculate energy in this band
+        band_energy = np.sum(energy_frame[band_indices])
+        band_energies.append(band_energy)
+    return np.argmax(band_energies), band_edges[np.argmax(band_energies)]  # Return max band index and avg freq
+
+# Initialize the results list and repeat counter
+results = []
+repeat_count = 0
+prev_band_index = None
+
+# Process each window
+for frame in range(D_mag.shape[1]):
+    # Calculate max-energy band for the current frame
+    band_index, band_avg_freq = max_energy_band(D_mag[:, frame])
+    
+    # Compare with the previous window's max-energy band
+    if prev_band_index is None:
+        # First window, no comparison
+        results.append('U')
+    elif band_index > prev_band_index:
+        results.append('U')
+        repeat_count = 0
+    elif band_index < prev_band_index:
+        results.append('D')
+        repeat_count = 0
+    else:
+        # If the same band, increment repeat counter and note 'Rx'
+        repeat_count += 1
+        results[-1] = f'R{repeat_count}' if results and 'R' in results[-1] else f'R1'
+    
+    # Update previous band index
+    prev_band_index = band_index
+
+# Display the encoded pitch tendency sequence
+print(' '.join(results))
