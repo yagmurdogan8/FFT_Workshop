@@ -76,3 +76,5 @@ for i in range(1, len(energy_vectors)):
         else:
             pitch_tendencies.append("R1")
     last_max_band = current_max_band
+    
+print(pitch_tendencies)
