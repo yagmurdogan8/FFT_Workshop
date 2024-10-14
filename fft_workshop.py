@@ -19,13 +19,13 @@ plt.show()
 # parameters as stated in the instructions pdf
 # uncomment for task 2 part 1 :
 
-# window_size = 512
-# n_bands = 8
+window_size = 512
+n_bands = 8
 
 # uncomment for task 2 part 2 :
 
-window_size = 256
-n_bands = 16
+# window_size = 256
+# n_bands = 16
 
 band_limits = [(i * 1000, (i + 1) * 1000) for i in range(n_bands)]  # frequency bands as stated in the instructions pfd
 
