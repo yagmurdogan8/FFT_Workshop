@@ -68,8 +68,8 @@ def encode_pitch_tendencies(energies):
     
     return tendencies
 
-# encode pitch tendencies and save them
+# encode pitch tendencies and print them 
 tendencies = encode_pitch_tendencies(energies)
-with open('piano_tendencies.txt', 'w') as f:
-    for tendency in tendencies:
-        f.write(f"{tendency}\n")
+print("Pitch Tendencies:")
+for tendency in tendencies:
+    print(tendency)
