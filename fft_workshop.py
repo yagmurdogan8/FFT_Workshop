@@ -17,8 +17,15 @@ plt.show()
 # Task 2 Part 1:
 
 # parameters as stated in the instructions pdf
-window_size = 512
-n_bands = 8
+# uncomment for task 2 part 1 :
+
+# window_size = 512
+# n_bands = 8
+
+# uncomment for task 2 part 2 :
+window_size = 256
+n_bands = 4
+
 band_limits = [(i * 1000, (i + 1) * 1000) for i in range(n_bands)]  # frequency bands as stated in the instructions pfd
 
 # calculate the band energy for each window
@@ -42,9 +49,6 @@ energies = calculate_band_energy(y, sr, band_limits)
 np.savetxt('piano_energies.txt', energies, fmt='%.5f')  # document that to piano_energies.txt
 
 # Task 2 part 2:
-
-window_size = 256
-n_bands = 4
 
 # encode pitch tendencies (up, down and repeat)
 def encode_pitch_tendencies(energies):
@@ -71,7 +75,6 @@ def encode_pitch_tendencies(energies):
     
     return tendencies
 
-energies = calculate_band_energy(y, sr, band_limits)
 tendencies = encode_pitch_tendencies(energies)
 
 # final pitch tendencies
