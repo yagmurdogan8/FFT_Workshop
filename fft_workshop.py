@@ -23,8 +23,9 @@ plt.show()
 # n_bands = 8
 
 # uncomment for task 2 part 2 :
+
 window_size = 256
-n_bands = 4
+n_bands = 16
 
 band_limits = [(i * 1000, (i + 1) * 1000) for i in range(n_bands)]  # frequency bands as stated in the instructions pfd
 
@@ -50,9 +51,9 @@ np.savetxt('piano_energies.txt', energies, fmt='%.5f')  # document that to piano
 
 # Task 2 part 2:
 
-# encode pitch tendencies (up, down and repeat)
-def encode_pitch_tendencies(energies):
-    tendencies = []
+# encode pitch types (up, down and repeat)
+def encode_pitches(energies):
+    pitches = []
     last_max_band = None
     repeat_count = 0
     
@@ -60,23 +61,23 @@ def encode_pitch_tendencies(energies):
         max_band = np.argmax(window_energy)
         
         if last_max_band is None:
-            tendencies.append('Start')
+            pitches.append('Start')
         elif max_band > last_max_band:
-            tendencies.append('U')
+            pitches.append('U')
             repeat_count = 0
         elif max_band < last_max_band:
-            tendencies.append('D')
+            pitches.append('D')
             repeat_count = 0
         else:
             repeat_count += 1
-            tendencies.append(f'R{repeat_count}')
+            pitches.append(f'R{repeat_count}')
         
         last_max_band = max_band
     
-    return tendencies
+    return pitches
 
-tendencies = encode_pitch_tendencies(energies)
+pitches = encode_pitches(energies)
 
-# final pitch tendencies
-print("\nFinal Pitch Tendencies:")
-print("\n".join(tendencies))
+# final pitches
+print("\nFinal Pitches:")
+print("\n".join(pitches))
